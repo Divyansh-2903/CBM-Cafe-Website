@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import { Menu, X, ArrowRight, MapPin, Clock, Star, Instagram } from "lucide-react";
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +23,10 @@ export default function App() {
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
-          <img src="/logo.png" alt="CBM Logo" className="logo-circle" />
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="CBM Logo" className="logo-circle" />
+            <span className="font-serif font-bold text-xl md:text-2xl text-[var(--color-dark)] tracking-tight">Chick's Burger</span>
+          </div>
           
           <div className="hidden md:flex gap-10 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)]">
             <a href="#menu" className="hover:text-[var(--color-brand-red)] transition-colors relative group">
@@ -89,7 +88,7 @@ export default function App() {
             alt="Gourmet Burger"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, rgba(247,243,236,0.82) 0%, rgba(247,243,236,0.96) 60%, var(--color-cream) 100%)'}}></div>
+          <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, rgba(247,243,236,0.3) 0%, rgba(247,243,236,0.85) 50%, var(--color-cream) 100%)'}}></div>
         </div>
 
         <div className="w-full lg:w-5/12 px-6 md:px-12 lg:pl-20 xl:pl-32 flex flex-col justify-center z-20 py-28 lg:py-0 min-h-[92dvh] lg:min-h-0">
@@ -123,14 +122,14 @@ export default function App() {
 
         {/* Desktop-only right image */}
         <div className="hidden lg:block w-7/12 h-screen absolute right-0 top-0 overflow-hidden z-10">
-          <motion.div style={{ y: heroY, opacity }} className="w-full h-[120%] -top-[10%] relative">
+          <div className="w-full h-full relative">
             <div className="absolute inset-0 hero-overlay z-10"></div>
             <img
               src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=2000"
               alt="Gourmet Burger"
               className="w-full h-full object-cover object-left"
             />
-          </motion.div>
+          </div>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
