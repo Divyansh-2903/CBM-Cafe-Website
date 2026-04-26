@@ -23,9 +23,8 @@ export default function App() {
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="CBM Logo" className="logo-circle" />
-            <span className="font-serif font-bold text-xl md:text-2xl text-[var(--color-dark)] tracking-tight">Chick's Burger</span>
+          <div className="font-serif italic font-bold text-3xl md:text-4xl text-[var(--color-brand-red)] tracking-tight">
+            CBM<span className="text-[var(--color-brand-amber)]">.</span>
           </div>
           
           <div className="hidden md:flex gap-6 lg:gap-10 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)]">
