@@ -28,7 +28,7 @@ export default function App() {
             <span className="font-serif font-bold text-xl md:text-2xl text-[var(--color-dark)] tracking-tight">Chick's Burger</span>
           </div>
           
-          <div className="hidden md:flex gap-10 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)]">
+          <div className="hidden md:flex gap-6 lg:gap-10 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)]">
             <a href="#menu" className="hover:text-[var(--color-brand-red)] transition-colors relative group">
               Menu
               <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-[var(--color-brand-red)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
@@ -91,23 +91,23 @@ export default function App() {
           <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, rgba(247,243,236,0.3) 0%, rgba(247,243,236,0.85) 50%, var(--color-cream) 100%)'}}></div>
         </div>
 
-        <div className="w-full lg:w-5/12 px-6 md:px-12 lg:pl-20 xl:pl-32 flex flex-col justify-center z-20 py-28 lg:py-0 min-h-[92dvh] lg:min-h-0">
+        <div className="w-full lg:w-6/12 xl:w-5/12 px-6 md:px-12 lg:pl-16 xl:pl-24 flex flex-col justify-center z-20 py-28 lg:py-0 min-h-[92dvh] lg:min-h-0">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="tag-pill mb-6">
+            <div className="tag-pill mb-8">
               <Star size={12} fill="currentColor" /> 4.6 Rated on JustDial
             </div>
             <h1 className="font-serif text-[4rem] sm:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.92] text-[var(--color-dark)] mb-6 tracking-tight">
               Burgers <br/>That Hit <br/>
               <span className="text-[var(--color-brand-red)] italic font-display">Different.</span>
             </h1>
-            <p className="text-[var(--color-muted)] text-base md:text-lg mb-8 max-w-md font-light leading-relaxed">
+            <p className="text-[var(--color-muted)] text-base md:text-lg mb-10 max-w-md font-light leading-relaxed">
               Crafted with fresh ingredients, served with cold coffee, and enjoyed in the best café vibes. Open daily till 11:30 PM.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4">
               <button className="btn-primary group">
                 Explore Menu
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
