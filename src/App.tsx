@@ -27,9 +27,7 @@ export default function App() {
         }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
-          <div className="font-serif italic font-bold text-3xl md:text-4xl tracking-wide text-[var(--color-brand-red)]">
-            CBM<span className="text-xl text-[var(--color-brand-amber)]">.</span>
-          </div>
+          <img src="/logo.png" alt="CBM Logo" className="logo-circle" />
           
           <div className="hidden md:flex gap-10 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)]">
             <a href="#menu" className="hover:text-[var(--color-brand-red)] transition-colors relative group">
@@ -83,24 +81,34 @@ export default function App() {
       )}
 
       {/* Hero Section */}
-      <main className="relative min-h-[100dvh] flex flex-col lg:flex-row pt-24 lg:pt-0">
-        <div className="w-full lg:w-5/12 px-6 md:px-12 lg:pl-20 xl:pl-32 flex flex-col justify-center z-20 pb-16 lg:pb-0 pt-10 lg:pt-0">
-          <motion.div 
+      <main className="relative flex flex-col lg:flex-row lg:min-h-screen pt-20 lg:pt-0">
+        {/* Mobile hero image - full bleed behind text */}
+        <div className="absolute inset-0 lg:hidden z-0">
+          <img
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200"
+            alt="Gourmet Burger"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, rgba(247,243,236,0.82) 0%, rgba(247,243,236,0.96) 60%, var(--color-cream) 100%)'}}></div>
+        </div>
+
+        <div className="w-full lg:w-5/12 px-6 md:px-12 lg:pl-20 xl:pl-32 flex flex-col justify-center z-20 py-28 lg:py-0 min-h-[92dvh] lg:min-h-0">
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="tag-pill mb-8">
+            <div className="tag-pill mb-6">
               <Star size={12} fill="currentColor" /> 4.6 Rated on JustDial
             </div>
-            <h1 className="font-serif text-[4.5rem] md:text-[6rem] lg:text-[7rem] leading-[0.95] text-[var(--color-dark)] mb-8 tracking-tight">
+            <h1 className="font-serif text-[4rem] sm:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.92] text-[var(--color-dark)] mb-6 tracking-tight">
               Burgers <br/>That Hit <br/>
               <span className="text-[var(--color-brand-red)] italic font-display">Different.</span>
             </h1>
-            <p className="text-[var(--color-muted)] text-lg md:text-xl mb-10 max-w-md font-light leading-relaxed">
+            <p className="text-[var(--color-muted)] text-base md:text-lg mb-8 max-w-md font-light leading-relaxed">
               Crafted with fresh ingredients, served with cold coffee, and enjoyed in the best café vibes. Open daily till 11:30 PM.
             </p>
-            <div className="flex flex-col sm:flex-row gap-5">
+            <div className="flex flex-col sm:flex-row gap-4">
               <button className="btn-primary group">
                 Explore Menu
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -113,25 +121,21 @@ export default function App() {
           </motion.div>
         </div>
 
-        <div className="w-full lg:w-7/12 h-[60vh] lg:h-screen relative overflow-hidden z-10 lg:absolute lg:right-0 lg:top-0">
-          <motion.div 
-            style={{ y: heroY, opacity }}
-            className="w-full h-[120%] -top-[10%] relative"
-          >
-            <div className="absolute inset-0 hero-overlay z-10 lg:block hidden"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=2000" 
+        {/* Desktop-only right image */}
+        <div className="hidden lg:block w-7/12 h-screen absolute right-0 top-0 overflow-hidden z-10">
+          <motion.div style={{ y: heroY, opacity }} className="w-full h-[120%] -top-[10%] relative">
+            <div className="absolute inset-0 hero-overlay z-10"></div>
+            <img
+              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=2000"
               alt="Gourmet Burger"
-              className="w-full h-full object-cover object-center lg:object-left"
+              className="w-full h-full object-cover object-left"
             />
           </motion.div>
-          
-          {/* Trust Badge overlay */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1, duration: 0.6 }}
-            className="absolute bottom-8 right-8 z-20 rating-badge p-4 rounded-2xl flex items-center gap-4 hidden md:flex"
+            className="absolute bottom-8 right-8 z-20 rating-badge p-4 rounded-2xl flex items-center gap-4"
           >
             <div className="w-12 h-12 rounded-full bg-[var(--color-brand-amber)] flex items-center justify-center text-white">
               <Star fill="currentColor" size={24} />
@@ -180,7 +184,7 @@ export default function App() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
           <div className="flex flex-col items-center text-center mb-16">
             <span className="section-label mb-4">Our Signatures</span>
-            <h2 className="font-serif text-[3.5rem] md:text-[5rem] leading-none text-[var(--color-dark)] mb-6">
+            <h2 className="font-serif text-[3.5rem] md:text-[4rem] lg:text-[4.5rem] xl:text-[5rem] leading-none text-[var(--color-dark)] mb-6">
               What We Make
             </h2>
             <div className="ornament-line w-full max-w-md mx-auto">
@@ -197,7 +201,7 @@ export default function App() {
               className="bg-[var(--color-parchment)] rounded-3xl overflow-hidden card-warm flex flex-col group border border-[rgba(181,135,42,0.1)]"
             >
               <div className="h-64 overflow-hidden img-zoom bg-[var(--color-dark)]">
-                <img src="https://images.unsplash.com/photo-1586816001966-79b736744398?auto=format&fit=crop&q=80&w=1200" alt="Mini Bites Veg Combo" className="w-full h-full object-cover opacity-90" />
+                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1200" alt="Mini Bites Veg Combo" className="w-full h-full object-cover opacity-90" />
               </div>
               <div className="p-8 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-4">
@@ -222,7 +226,7 @@ export default function App() {
               className="bg-[var(--color-parchment)] rounded-3xl overflow-hidden card-warm flex flex-col group border border-[rgba(181,135,42,0.1)]"
             >
               <div className="h-64 overflow-hidden img-zoom bg-[var(--color-dark)]">
-                <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=1200" alt="Signature Wraps" className="w-full h-full object-cover opacity-90" />
+                <img src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&q=80&w=1200" alt="Signature Wraps" className="w-full h-full object-cover opacity-90" />
               </div>
               <div className="p-8 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-4">
@@ -247,7 +251,7 @@ export default function App() {
               className="bg-[var(--color-parchment)] rounded-3xl overflow-hidden card-warm flex flex-col group border border-[rgba(181,135,42,0.1)] lg:col-span-1 md:col-span-2"
             >
               <div className="h-64 overflow-hidden img-zoom bg-[var(--color-dark)]">
-                <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1200" alt="Blue Lagoon Mocktail" className="w-full h-full object-cover opacity-90" />
+                <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&q=80&w=1200" alt="Blue Lagoon Mocktail" className="w-full h-full object-cover opacity-90" />
               </div>
               <div className="p-8 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-4">
@@ -274,10 +278,10 @@ export default function App() {
 
       {/* Gallery Section */}
       <section id="gallery" className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col items-center text-center md:flex-row md:items-end md:text-left md:justify-between mb-16 gap-6">
           <div>
             <span className="section-label mb-4 block">Inside The Cafe</span>
-            <h2 className="font-serif text-[3.5rem] md:text-[5rem] leading-none text-[var(--color-dark)]">
+            <h2 className="font-serif text-[3rem] sm:text-[3.5rem] md:text-[4rem] lg:text-[4.5rem] xl:text-[5rem] leading-none text-[var(--color-dark)]">
               CBM Vibes
             </h2>
           </div>
@@ -291,19 +295,19 @@ export default function App() {
             whileHover={{ y: -8 }}
             className="rounded-[2rem] overflow-hidden aspect-[4/5] md:col-span-2 img-zoom shadow-xl"
           >
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200" alt="Vibe 1" className="w-full h-full object-cover"/>
+            <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200" alt="Vibe 1" className="w-full h-full object-cover"/>
           </motion.div>
           <motion.div 
             whileHover={{ y: -8 }}
             className="rounded-[2rem] overflow-hidden aspect-[4/5] img-zoom shadow-xl"
           >
-            <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800" alt="Vibe 2" className="w-full h-full object-cover"/>
+            <img src="https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&q=80&w=800" alt="Vibe 2" className="w-full h-full object-cover"/>
           </motion.div>
           <motion.div 
             whileHover={{ y: -8 }}
             className="rounded-[2rem] overflow-hidden aspect-[4/5] img-zoom shadow-xl"
           >
-            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&q=80&w=800" alt="Vibe 3" className="w-full h-full object-cover"/>
+            <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&q=80&w=800" alt="Vibe 3" className="w-full h-full object-cover"/>
           </motion.div>
         </div>
       </section>
@@ -317,7 +321,7 @@ export default function App() {
               <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
             </svg>
           </div>
-          <p className="font-serif text-[2.5rem] md:text-[4rem] lg:text-[5rem] leading-[1.1] mb-12 text-[var(--color-dark)] tracking-tight">
+          <p className="font-serif text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] xl:text-[5rem] leading-[1.1] mb-12 text-[var(--color-dark)] tracking-tight">
             "Every bite should feel like a <span className="italic text-[var(--color-brand-red)]">good day</span>."
           </p>
           <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)] mb-4">
@@ -330,10 +334,10 @@ export default function App() {
       {/* Find Us Section */}
       <section className="py-24 md:py-32 bg-[var(--color-cream)] relative border-t border-[rgba(181,135,42,0.1)]">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="flex flex-col items-center text-center md:flex-row md:items-end md:text-left md:justify-between mb-16 gap-6">
             <div>
               <span className="section-label mb-4 block">Visit Us</span>
-              <h2 className="font-serif text-[3.5rem] md:text-[5rem] leading-none text-[var(--color-dark)]">
+              <h2 className="font-serif text-[3rem] sm:text-[3.5rem] md:text-[4rem] lg:text-[4.5rem] xl:text-[5rem] leading-none text-[var(--color-dark)]">
                 Find CBM
               </h2>
             </div>
