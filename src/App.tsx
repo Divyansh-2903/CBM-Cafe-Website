@@ -1,218 +1,443 @@
-import { useState } from "react";
-import { motion } from "motion/react";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { Menu, X, ArrowRight, MapPin, Clock, Star, Instagram } from "lucide-react";
 
 export default function App() {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <div className="min-h-screen font-sans bg-brand-beige selection:bg-brand-red selection:text-white">
+    <div className="min-h-screen relative overflow-hidden">
       {/* Navigation */}
-      <nav className="absolute top-0 w-full z-50 py-6">
+      <nav 
+        className={`fixed w-full z-50 transition-all duration-500 ${
+          isScrolled ? "py-4 nav-glass" : "py-8 bg-transparent"
+        }`}
+      >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex justify-between items-center">
-          <div className="font-serif italic font-bold text-3xl tracking-wide text-brand-dark">CBM</div>
+          <div className="font-serif italic font-bold text-3xl md:text-4xl tracking-wide text-[var(--color-brand-red)]">
+            CBM<span className="text-xl text-[var(--color-brand-amber)]">.</span>
+          </div>
           
-          <div className="hidden md:flex gap-10 text-[10px] font-semibold tracking-[0.2em] uppercase text-brand-dark/50">
-            <a href="#menu" className="text-brand-dark border-b border-brand-dark pb-0.5 transition-colors">Menu</a>
-            <a href="#gallery" className="hover:text-brand-dark transition-colors">Gallery</a>
-            <a href="#about" className="hover:text-brand-dark transition-colors">About</a>
-            <a href="#location" className="hover:text-brand-dark transition-colors">Find Us</a>
+          <div className="hidden md:flex gap-10 text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)]">
+            <a href="#menu" className="hover:text-[var(--color-brand-red)] transition-colors relative group">
+              Menu
+              <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-[var(--color-brand-red)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+            </a>
+            <a href="#gallery" className="hover:text-[var(--color-brand-red)] transition-colors relative group">
+              Gallery
+              <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-[var(--color-brand-red)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+            </a>
+            <a href="#location" className="hover:text-[var(--color-brand-red)] transition-colors relative group">
+              Find Us
+              <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-[var(--color-brand-red)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+            </a>
           </div>
 
-          <button className="hidden md:block bg-brand-red text-white px-7 py-2.5 rounded-full text-xs font-semibold tracking-wider hover:bg-brand-red-hover transition-colors shadow-lg">
-            Order Now
+          <button className="hidden md:flex btn-primary">
+            Order Pickup
           </button>
 
-          <button className="md:hidden text-brand-dark" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X /> : <Menu />}
+          <button 
+            className="md:hidden text-[var(--color-dark)] p-2" 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-brand-beige pt-24 px-6 md:hidden">
-          <div className="flex flex-col gap-6 text-center text-4xl font-serif">
-            <a href="#menu" onClick={() => setIsMobileMenuOpen(false)}>Menu</a>
-            <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)}>Gallery</a>
-            <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a>
-            <a href="#location" onClick={() => setIsMobileMenuOpen(false)}>Find Us</a>
-            <button className="mt-8 mx-auto bg-brand-red text-white px-8 py-3 rounded-full text-sm font-semibold">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed inset-0 z-40 bg-[var(--color-cream)] pt-32 px-6 md:hidden flex flex-col"
+        >
+          <div className="flex flex-col gap-8 text-center font-serif text-4xl">
+            <a href="#menu" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[var(--color-brand-red)]">Our Menu</a>
+            <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[var(--color-brand-red)]">The Vibe</a>
+            <a href="#location" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-[var(--color-brand-red)]">Location</a>
+          </div>
+          <div className="mt-auto pb-12 flex flex-col items-center gap-6">
+            <button className="btn-primary w-full max-w-sm justify-center text-lg py-4">
               Order Now
             </button>
+            <div className="flex gap-6 text-[var(--color-brand-amber)]">
+              <Instagram size={24} />
+            </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Hero Section */}
-      <main className="relative flex flex-col md:flex-row min-h-[100dvh]">
-        <div className="w-full md:w-1/2 pt-32 pb-16 px-6 md:px-12 lg:px-20 xl:px-24 flex flex-col justify-center z-10">
-          <h1 className="font-serif text-[4rem] md:text-[5rem] lg:text-[7rem] leading-[1.05] text-brand-dark mb-8 tracking-tight">
-            Burgers <br/>That Hit <br/>
-            <span className="text-brand-red italic">Different.</span>
-          </h1>
-          <p className="text-brand-dark/60 text-base md:text-lg mb-10 max-w-sm font-light leading-relaxed">
-            Fresh food, cold coffee & café vibes — open daily till 11:30 PM
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button className="bg-brand-red text-white px-8 py-3.5 rounded-full text-sm font-medium hover:bg-brand-red-hover transition-all w-fit shadow-xl shadow-brand-red/20">
-              Explore Menu
-            </button>
-            <button className="border border-brand-dark/20 text-brand-dark px-8 py-3.5 rounded-full text-sm font-medium hover:bg-brand-dark/5 transition-all w-fit">
-              Get Directions
-            </button>
-          </div>
+      <main className="relative min-h-[100dvh] flex flex-col lg:flex-row pt-24 lg:pt-0">
+        <div className="w-full lg:w-5/12 px-6 md:px-12 lg:pl-20 xl:pl-32 flex flex-col justify-center z-20 pb-16 lg:pb-0 pt-10 lg:pt-0">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="tag-pill mb-8">
+              <Star size={12} fill="currentColor" /> 4.6 Rated on JustDial
+            </div>
+            <h1 className="font-serif text-[4.5rem] md:text-[6rem] lg:text-[7rem] leading-[0.95] text-[var(--color-dark)] mb-8 tracking-tight">
+              Burgers <br/>That Hit <br/>
+              <span className="text-[var(--color-brand-red)] italic font-display">Different.</span>
+            </h1>
+            <p className="text-[var(--color-muted)] text-lg md:text-xl mb-10 max-w-md font-light leading-relaxed">
+              Crafted with fresh ingredients, served with cold coffee, and enjoyed in the best café vibes. Open daily till 11:30 PM.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-5">
+              <button className="btn-primary group">
+                Explore Menu
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button className="btn-outline">
+                <MapPin size={16} />
+                Get Directions
+              </button>
+            </div>
+          </motion.div>
         </div>
 
-        <div className="w-full md:w-1/2 min-h-[60vh] md:h-screen md:absolute md:right-0 md:top-0 relative">
-          <img 
-            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1600" 
-            alt="Delicious burger"
-            className="w-full h-full object-cover rounded-tl-[1rem] md:rounded-tl-[0rem]"
-          />
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-20 flex items-center gap-3 w-max">
-            <div className="bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full flex items-center gap-2 shadow-xl border border-white/20">
-              <span className="font-bold text-sm text-brand-dark">4.6</span>
-              <span className="text-[#EAB308] text-sm">★</span>
-              <span className="text-[10px] uppercase font-semibold text-brand-dark/60 ml-2 tracking-wider">JustDial Reviews</span>
+        <div className="w-full lg:w-7/12 h-[60vh] lg:h-screen relative overflow-hidden z-10 lg:absolute lg:right-0 lg:top-0">
+          <motion.div 
+            style={{ y: heroY, opacity }}
+            className="w-full h-[120%] -top-[10%] relative"
+          >
+            <div className="absolute inset-0 hero-overlay z-10 lg:block hidden"></div>
+            <img 
+              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=2000" 
+              alt="Gourmet Burger"
+              className="w-full h-full object-cover object-center lg:object-left"
+            />
+          </motion.div>
+          
+          {/* Trust Badge overlay */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1, duration: 0.6 }}
+            className="absolute bottom-8 right-8 z-20 rating-badge p-4 rounded-2xl flex items-center gap-4 hidden md:flex"
+          >
+            <div className="w-12 h-12 rounded-full bg-[var(--color-brand-amber)] flex items-center justify-center text-white">
+              <Star fill="currentColor" size={24} />
             </div>
-            <a href="#" className="w-[45px] h-[45px] bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 transition-transform">
-              <MessageCircle className="w-5 h-5 fill-white text-white" />
-            </a>
-          </div>
+            <div>
+              <div className="text-[10px] uppercase tracking-widest font-bold text-[var(--color-muted)]">Customer Favorite</div>
+              <div className="font-serif font-bold text-xl text-[var(--color-dark)]">"Best in Jhotwara"</div>
+            </div>
+          </motion.div>
         </div>
       </main>
 
-      {/* Marquee */}
-      <div className="bg-[#151515] text-white py-3.5 overflow-hidden flex whitespace-nowrap text-[10px] font-semibold tracking-[0.2em] uppercase items-center relative z-20">
-        <motion.div 
-          animate={{ x: ["0%", "-50%"] }} 
-          transition={{ ease: "linear", duration: 30, repeat: Infinity }} 
-          className="flex gap-8"
-        >
-          {Array(8).fill("JHOTWARA'S FAVOURITE SPOT • COMBOS FROM ₹99 • BURGERS FROM ₹49 • WRAPS • COLD COFFEE ₹49 • OPEN TILL 11:30 PM •").map((text, i) => (
-            <span key={i} className="text-white/80">{text}</span>
-          ))}
-        </motion.div>
+      {/* Stats / Trust Bar */}
+      <div className="bg-[var(--color-dark)] text-[var(--color-cream)] relative z-20 border-y border-[rgba(255,255,255,0.1)]">
+        <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-[rgba(255,255,255,0.1)] border-x border-[rgba(255,255,255,0.1)]">
+          <div className="stat-item">
+            <span className="font-serif text-3xl md:text-4xl text-[var(--color-brand-amber)]">100%</span>
+            <span className="text-[10px] uppercase tracking-widest font-bold text-white/50">Fresh Patties</span>
+          </div>
+          <div className="stat-item">
+            <span className="font-serif text-3xl md:text-4xl text-[var(--color-brand-amber)]">7 Days</span>
+            <span className="text-[10px] uppercase tracking-widest font-bold text-white/50">Open Weekly</span>
+          </div>
+          <div className="stat-item">
+            <span className="font-serif text-3xl md:text-4xl text-[var(--color-brand-amber)]">₹350</span>
+            <span className="text-[10px] uppercase tracking-widest font-bold text-white/50">Avg for Two</span>
+          </div>
+          <div className="stat-item">
+            <span className="font-serif text-3xl md:text-4xl text-[var(--color-brand-amber)]">11:30</span>
+            <span className="text-[10px] uppercase tracking-widest font-bold text-white/50">PM Closing</span>
+          </div>
+        </div>
       </div>
 
-      {/* Gallery Section */}
-      <section id="gallery" className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 lg:px-12">
-        <h2 className="font-serif text-[3rem] md:text-[4rem] text-brand-dark mb-12">CBM Vibes</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          <div className="rounded-2xl overflow-hidden aspect-square"><img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800" alt="Vibe 1" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"/></div>
-          <div className="rounded-2xl overflow-hidden aspect-square"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=800" alt="Vibe 2" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"/></div>
-          <div className="rounded-2xl overflow-hidden aspect-square col-span-2 md:col-span-1"><img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=800" alt="Vibe 3" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"/></div>
-          <div className="rounded-2xl overflow-hidden aspect-square"><img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&q=80&w=800" alt="Vibe 4" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"/></div>
-          <div className="rounded-2xl overflow-hidden aspect-square bg-white border border-[#E5E2D9]"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=800" alt="Vibe 5" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 mix-blend-multiply opacity-90"/></div>
+      {/* Marquee */}
+      <div className="bg-[var(--color-brand-red)] text-[var(--color-cream)] py-4 overflow-hidden flex whitespace-nowrap text-[11px] font-bold tracking-[0.25em] uppercase items-center relative z-20 shadow-inner">
+        <div className="animate-marquee flex gap-12">
+          {Array(10).fill("JHOTWARA'S FAVOURITE • COMBOS FROM ₹99 • BURGERS FROM ₹49 • COLD COFFEE ₹49 •").map((text, i) => (
+            <span key={i} className="text-[var(--color-cream)]/90">{text}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Menu Section */}
+      <section id="menu" className="py-24 md:py-32 bg-[var(--color-cream-dark)] relative">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
+          <div className="flex flex-col items-center text-center mb-16">
+            <span className="section-label mb-4">Our Signatures</span>
+            <h2 className="font-serif text-[3.5rem] md:text-[5rem] leading-none text-[var(--color-dark)] mb-6">
+              What We Make
+            </h2>
+            <div className="ornament-line w-full max-w-md mx-auto">
+              <span className="w-2 h-2 rounded-full bg-[var(--color-brand-amber)]"></span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Card 1 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="bg-[var(--color-parchment)] rounded-3xl overflow-hidden card-warm flex flex-col group border border-[rgba(181,135,42,0.1)]"
+            >
+              <div className="h-64 overflow-hidden img-zoom bg-[var(--color-dark)]">
+                <img src="https://images.unsplash.com/photo-1586816001966-79b736744398?auto=format&fit=crop&q=80&w=1200" alt="Mini Bites Veg Combo" className="w-full h-full object-cover opacity-90" />
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="font-serif text-3xl font-bold text-[var(--color-dark)]">Mini Bites Combo</h3>
+                  <div className="text-[var(--color-brand-red)] font-serif italic text-2xl font-bold">₹169</div>
+                </div>
+                <p className="text-[var(--color-muted)] font-light leading-relaxed mb-6">A perfect assortment of our best vegetarian mini sliders. Served with crispy fries and our signature dips.</p>
+                <div className="mt-auto">
+                  <button className="text-[11px] font-bold tracking-[0.15em] uppercase text-[var(--color-brand-amber)] hover:text-[var(--color-brand-red)] flex items-center gap-2 transition-colors">
+                    Add to order <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 2 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: 0.1 }}
+              className="bg-[var(--color-parchment)] rounded-3xl overflow-hidden card-warm flex flex-col group border border-[rgba(181,135,42,0.1)]"
+            >
+              <div className="h-64 overflow-hidden img-zoom bg-[var(--color-dark)]">
+                <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=1200" alt="Signature Wraps" className="w-full h-full object-cover opacity-90" />
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="font-serif text-3xl font-bold text-[var(--color-dark)]">Signature Wraps</h3>
+                  <div className="text-[var(--color-brand-red)] font-serif italic text-2xl font-bold">₹59</div>
+                </div>
+                <p className="text-[var(--color-muted)] font-light leading-relaxed mb-6">Loaded with fresh veggies, your choice of fillings, and zesty sauces, all wrapped in a soft, warm tortilla.</p>
+                <div className="mt-auto">
+                  <button className="text-[11px] font-bold tracking-[0.15em] uppercase text-[var(--color-brand-amber)] hover:text-[var(--color-brand-red)] flex items-center gap-2 transition-colors">
+                    Add to order <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Card 3 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ delay: 0.2 }}
+              className="bg-[var(--color-parchment)] rounded-3xl overflow-hidden card-warm flex flex-col group border border-[rgba(181,135,42,0.1)] lg:col-span-1 md:col-span-2"
+            >
+              <div className="h-64 overflow-hidden img-zoom bg-[var(--color-dark)]">
+                <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1200" alt="Blue Lagoon Mocktail" className="w-full h-full object-cover opacity-90" />
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex justify-between items-start mb-4">
+                  <h3 className="font-serif text-3xl font-bold text-[var(--color-dark)]">Blue Lagoon</h3>
+                  <div className="text-[var(--color-brand-red)] font-serif italic text-2xl font-bold">₹109</div>
+                </div>
+                <p className="text-[var(--color-muted)] font-light leading-relaxed mb-6">A refreshing, vibrant mocktail that perfectly balances sweet and citrus notes. The ideal thirst quencher.</p>
+                <div className="mt-auto">
+                  <button className="text-[11px] font-bold tracking-[0.15em] uppercase text-[var(--color-brand-amber)] hover:text-[var(--color-brand-red)] flex items-center gap-2 transition-colors">
+                    Add to order <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="text-center mt-20">
+            <button className="btn-outline bg-transparent border-[var(--color-brand-amber)] text-[var(--color-brand-amber)] hover:bg-[var(--color-brand-amber)] hover:text-white hover:border-[var(--color-brand-amber)]">
+              View Full Menu
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Menu Section */}
-      <section id="menu" className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 lg:px-12 border-t border-brand-dark/5">
-        <h2 className="font-serif text-[3rem] md:text-[4rem] text-brand-dark mb-12">What We Make</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {/* Card 1 */}
-          <div className="bg-white rounded-[1.5rem] overflow-hidden flex flex-col shadow-sm border border-[#EBE8DF] group">
-            <div className="h-56 md:h-72 overflow-hidden bg-[#1A1A1A]">
-              <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1200" alt="Classic Burger" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90" />
-            </div>
-            <div className="p-8 flex justify-between items-start">
-              <div>
-                <h3 className="font-serif text-2xl font-medium mb-2 text-brand-dark">Classic Burger</h3>
-                <p className="text-sm font-light text-brand-dark/50">The simple staple done right.</p>
-              </div>
-              <div className="text-[#DF8C72] font-serif italic text-xl">₹49</div>
-            </div>
+      {/* Gallery Section */}
+      <section id="gallery" className="py-24 md:py-32 max-w-[1400px] mx-auto px-6 lg:px-12">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div>
+            <span className="section-label mb-4 block">Inside The Cafe</span>
+            <h2 className="font-serif text-[3.5rem] md:text-[5rem] leading-none text-[var(--color-dark)]">
+              CBM Vibes
+            </h2>
           </div>
-
-          {/* Card 2 */}
-          <div className="bg-white rounded-[1.5rem] overflow-hidden flex flex-col shadow-sm border border-[#EBE8DF] group">
-            <div className="h-56 md:h-72 overflow-hidden bg-[#1A1A1A]">
-              <img src="https://images.unsplash.com/photo-1615671524827-c10557b78161?auto=format&fit=crop&q=80&w=1200" alt="Spicy Chicken" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90" />
-            </div>
-            <div className="p-8 flex justify-between items-start">
-              <div>
-                <h3 className="font-serif text-2xl font-medium mb-2 text-brand-dark">Spicy Chicken</h3>
-                <p className="text-sm font-light text-brand-dark/50">Crispy, bold, and fiery.</p>
-              </div>
-              <div className="text-[#DF8C72] font-serif italic text-xl">₹99</div>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white rounded-[1.5rem] overflow-hidden flex flex-col shadow-sm border border-[#EBE8DF] group">
-            <div className="h-56 md:h-72 overflow-hidden bg-[#1A1A1A]">
-              <img src="https://images.unsplash.com/photo-1572490122747-3968b75bb69c?auto=format&fit=crop&q=80&w=1200" alt="Cold Coffee" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90" />
-            </div>
-            <div className="p-8 flex justify-between items-start">
-              <div>
-                <h3 className="font-serif text-2xl font-medium mb-2 text-brand-dark">Cold Coffee</h3>
-                <p className="text-sm font-light text-brand-dark/50">Creamy and chilled.</p>
-              </div>
-              <div className="text-[#DF8C72] font-serif italic text-xl">₹49</div>
-            </div>
-          </div>
-
-          {/* Card 4 - Wide */}
-          <div className="bg-white rounded-[1.5rem] overflow-hidden flex flex-col shadow-sm border border-[#EBE8DF] group md:col-span-1 lg:col-span-1 relative">
-            <div className="h-56 md:h-72 overflow-hidden bg-[#1A1A1A]">
-              <img src="https://images.unsplash.com/photo-1626700051175-6818013e1d4b?auto=format&fit=crop&q=80&w=1200" alt="Paneer Wrap" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90" />
-            </div>
-            <div className="p-8 flex justify-between items-start">
-              <div>
-                <h3 className="font-serif text-2xl font-medium mb-2 text-brand-dark">Paneer Wrap</h3>
-                <p className="text-sm font-light text-brand-dark/50">Grilled to perfection with house sauces.</p>
-              </div>
-              <div className="text-[#DF8C72] font-serif italic text-xl">₹79</div>
-            </div>
-          </div>
+          <p className="max-w-xs text-[var(--color-muted)] pb-2">
+            Warm lighting, cozy seating, and the aroma of fresh burgers. A place meant to be shared.
+          </p>
         </div>
-
-        <div className="text-center mt-16">
-          <a href="#" className="inline-block text-[10px] font-semibold tracking-widest uppercase border-b border-brand-dark/20 pb-1 text-brand-dark/60 hover:text-brand-dark hover:border-brand-dark transition-all">
-            View Full Menu
-          </a>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <motion.div 
+            whileHover={{ y: -8 }}
+            className="rounded-[2rem] overflow-hidden aspect-[4/5] md:col-span-2 img-zoom shadow-xl"
+          >
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200" alt="Vibe 1" className="w-full h-full object-cover"/>
+          </motion.div>
+          <motion.div 
+            whileHover={{ y: -8 }}
+            className="rounded-[2rem] overflow-hidden aspect-[4/5] img-zoom shadow-xl"
+          >
+            <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800" alt="Vibe 2" className="w-full h-full object-cover"/>
+          </motion.div>
+          <motion.div 
+            whileHover={{ y: -8 }}
+            className="rounded-[2rem] overflow-hidden aspect-[4/5] img-zoom shadow-xl"
+          >
+            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&q=80&w=800" alt="Vibe 3" className="w-full h-full object-cover"/>
+          </motion.div>
         </div>
       </section>
 
       {/* Quote Section */}
-      <section className="py-24 md:py-40 bg-brand-beige-dim text-center px-6">
-        <div className="flex justify-center gap-1.5 mb-8">
-          <div className="w-2.5 h-10 bg-[#D4C39B] rounded-full rotate-12"></div>
-          <div className="w-2.5 h-10 bg-[#D4C39B] rounded-full rotate-12"></div>
+      <section className="py-24 md:py-40 bg-[var(--color-cream-deeper)] text-center px-6 relative border-y border-[rgba(181,135,42,0.1)]">
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at center, var(--color-brand-amber) 0%, transparent 60%)' }}></div>
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <div className="flex justify-center mb-8 text-[var(--color-brand-amber)]">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+            </svg>
+          </div>
+          <p className="font-serif text-[2.5rem] md:text-[4rem] lg:text-[5rem] leading-[1.1] mb-12 text-[var(--color-dark)] tracking-tight">
+            "Every bite should feel like a <span className="italic text-[var(--color-brand-red)]">good day</span>."
+          </p>
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-dark-muted)] mb-4">
+            Made Fresh At CBM Cafe
+          </p>
+          <div className="ornament-line w-32 mx-auto"></div>
         </div>
-        <p className="font-serif italic text-4xl md:text-5xl lg:text-6xl max-w-3xl mx-auto leading-tight mb-10 text-brand-dark tracking-tight">
-          Every bite should feel like a good day.
-        </p>
-        <p className="text-[10px] font-semibold tracking-widest uppercase text-brand-dark/50 mb-4">
-          — MADE FRESH AT CBM CAFE, JHOTWARA
-        </p>
-        <p className="text-xs text-brand-dark/40 font-medium">
-          ₹350 avg for two <span className="mx-2">•</span> Open 7 days a week
-        </p>
+      </section>
+
+      {/* Find Us Section */}
+      <section className="py-24 md:py-32 bg-[var(--color-cream)] relative border-t border-[rgba(181,135,42,0.1)]">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div>
+              <span className="section-label mb-4 block">Visit Us</span>
+              <h2 className="font-serif text-[3.5rem] md:text-[5rem] leading-none text-[var(--color-dark)]">
+                Find CBM
+              </h2>
+            </div>
+            <p className="max-w-xs text-[var(--color-muted)] pb-2">
+              Drop by for the best burgers in Jhotwara. We can't wait to serve you!
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 rounded-3xl overflow-hidden h-[400px] lg:h-auto shadow-xl border border-[rgba(181,135,42,0.1)] bg-[var(--color-parchment)] relative group">
+              <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors pointer-events-none z-10"></div>
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14227.098254881335!2d75.74830155!3d26.94236025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396db3ad539a2b6d%3A0xfdb51cd5de9996d9!2sJhotwara%2C%20Jaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1714080000000!5m2!1sen!2sin" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0, minHeight: '400px' }} 
+                allowFullScreen={false} 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+                title="CBM Cafe Location"
+              ></iframe>
+            </div>
+            <div className="bg-[var(--color-parchment)] rounded-3xl p-8 md:p-10 shadow-xl flex flex-col justify-center border border-[rgba(181,135,42,0.1)]">
+              <div className="mb-10">
+                <h4 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-brand-amber)] mb-5">Location</h4>
+                <div className="flex items-start gap-4 text-[var(--color-dark)]">
+                  <MapPin size={24} className="shrink-0 mt-1 text-[var(--color-brand-red)]" />
+                  <p className="font-light leading-relaxed text-lg">
+                    City Mall, Kanta Road,<br />
+                    Jagannathpuri, Jhotwara,<br />
+                    Jaipur – 302012, Rajasthan
+                  </p>
+                </div>
+              </div>
+              <div className="mb-10">
+                <h4 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-brand-amber)] mb-5">Hours</h4>
+                <div className="flex items-start gap-4 text-[var(--color-dark)]">
+                  <Clock size={24} className="shrink-0 mt-1 text-[var(--color-brand-red)]" />
+                  <p className="font-light leading-relaxed text-lg">
+                    Monday – Sunday<br />
+                    11:00 AM – 11:30 PM
+                  </p>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <button className="btn-primary w-full justify-center group py-4">
+                  Get Directions
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#1A1A1A] text-white pt-32 pb-16 relative overflow-hidden flex flex-col items-center">
-        <div className="w-full max-w-[1400px] mx-auto px-6 relative z-10">
-          <div className="flex justify-center mb-16 select-none opacity-5">
-            <span className="font-serif italic text-[8rem] md:text-[16rem] lg:text-[22rem] leading-none tracking-tighter mix-blend-overlay block text-center">
-              CBM
-            </span>
+      <footer id="location" className="footer-bg text-[var(--color-cream)] pt-24 md:pt-32 pb-12 relative">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-24">
+            <div className="lg:col-span-2">
+              <div className="font-serif italic font-bold text-5xl mb-6 text-[var(--color-brand-red)]">
+                CBM<span className="text-[var(--color-brand-amber)]">.</span>
+              </div>
+              <p className="text-white/60 max-w-sm mb-8 leading-relaxed font-light">
+                Serving the best burgers and cold coffee in Jhotwara. Come for the food, stay for the vibes.
+              </p>
+              <div className="flex gap-4">
+                <a href="#" className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-[var(--color-brand-amber)] hover:border-[var(--color-brand-amber)] transition-all">
+                  <Instagram size={20} />
+                </a>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-brand-amber)] mb-6">Find Us</h4>
+              <ul className="space-y-4 text-white/70 font-light">
+                <li className="flex items-start gap-3">
+                  <MapPin size={18} className="shrink-0 mt-1 text-[var(--color-brand-red)]" />
+                  <span>Jhotwara, Jaipur<br/>Rajasthan, India</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Clock size={18} className="shrink-0 text-[var(--color-brand-red)]" />
+                  <span>Open Daily<br/>11:00 AM - 11:30 PM</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[var(--color-brand-amber)] mb-6">Quick Links</h4>
+              <ul className="space-y-3 text-white/70 font-light flex flex-col">
+                <a href="#menu" className="hover:text-white transition-colors w-fit">Our Menu</a>
+                <a href="#gallery" className="hover:text-white transition-colors w-fit">Gallery</a>
+                <a href="https://swiggy.com" className="hover:text-[var(--color-brand-red)] transition-colors w-fit flex items-center gap-2">Order on Swiggy <ArrowRight size={14} /></a>
+              </ul>
+            </div>
           </div>
 
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 text-[10px] font-semibold tracking-[0.2em] uppercase mb-16 text-white/50">
-            <a href="#menu" className="hover:text-white transition-colors">Menu</a>
-            <a href="#gallery" className="hover:text-white transition-colors">Gallery</a>
-            <a href="https://instagram.com" className="hover:text-white transition-colors">Instagram</a>
-            <a href="https://swiggy.com" className="hover:text-white transition-colors">Swiggy</a>
-            <a href="#location" className="hover:text-white transition-colors">Find Us</a>
-          </div>
-
-          <div className="text-center text-[10px] tracking-widest uppercase text-white/30 font-semibold">
-            © {new Date().getFullYear()} CHICK'S BURGER & MORE. ALL RIGHTS RESERVED.
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold tracking-widest uppercase text-white/40">
+            <div>© {new Date().getFullYear()} CHICK'S BURGER & MORE.</div>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-white transition-colors">Privacy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms</a>
+            </div>
           </div>
         </div>
       </footer>
