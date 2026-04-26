@@ -91,7 +91,7 @@ export default function App() {
           <div className="absolute inset-0" style={{background:'linear-gradient(to bottom, rgba(247,243,236,0.3) 0%, rgba(247,243,236,0.85) 50%, var(--color-cream) 100%)'}}></div>
         </div>
 
-        <div className="w-full lg:w-6/12 xl:w-5/12 px-6 md:px-12 lg:pl-16 xl:pl-24 flex flex-col justify-center z-20 py-28 lg:py-0 min-h-[92dvh] lg:min-h-0">
+        <div className="w-full lg:w-6/12 xl:w-5/12 px-6 md:px-12 lg:pl-16 xl:pl-24 flex flex-col justify-center z-20 py-28 lg:pt-32 lg:pb-12 min-h-[92dvh] lg:min-h-0">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,7 +100,7 @@ export default function App() {
             <div className="tag-pill mb-8">
               <Star size={12} fill="currentColor" /> 4.6 Rated on JustDial
             </div>
-            <h1 className="font-serif text-[4rem] sm:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] leading-[0.92] text-[var(--color-dark)] mb-6 tracking-tight">
+            <h1 className="font-serif text-[4rem] sm:text-[5rem] lg:text-[5.5rem] xl:text-[6.5rem] leading-[1.05] text-[var(--color-dark)] mb-6 tracking-tight">
               Burgers <br/>That Hit <br/>
               <span className="text-[var(--color-brand-red)] italic font-display">Different.</span>
             </h1>
